@@ -120,8 +120,8 @@ public:
             }
 
             cromosome[i] += velocity[i];
-            // if (cromosome[i] > upper_bound) cromosome[i] = upper_bound;
-            // if (cromosome[i] < lower_bound) cromosome[i] = lower_bound;
+            if (cromosome[i] > upper_bound) cromosome[i] = upper_bound;
+            if (cromosome[i] < lower_bound) cromosome[i] = lower_bound;
         }
 
         double cost = benchmark.computeFunction(1, cromosome);
@@ -182,7 +182,7 @@ public:
             for (int i = 0; i < pop_size; ++i) {
                 particles.emplace_back(v_max, cromosome_size, gen, dist, lower_bound, upper_bound);
             }
-
+                
             std::vector<double> best_pos(cromosome_size);
             double best_pos_z = std::numeric_limits<double>::infinity();
             double inertia_weight = 0.5 + (dist(gen)) / 2; //ciudat
@@ -203,6 +203,7 @@ public:
             Best = best_pos;
             results.push_back(best_pos_z);
         }
+
 
         double sum = std::accumulate(results.begin(), results.end(), 0.0);
         double mean = sum / results.size();
@@ -270,9 +271,9 @@ int main() {
     int runs = 30;
     
     double personal_c = 2.0;
-    double social_c = 2.0;
+    double social_c = 1.9;
 
-//for 5 dimension
+//for 2 dimension
     int dimensions = 2;
     std::string fileName = std::to_string(dimensions) + ".out";
 
@@ -288,7 +289,48 @@ int main() {
     iterations = 1700;
     v_max = 0.5;
     std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations,pop_size, v_max, dimensions, runs);
+    pop_size = 100;
+    iterations = 1500;
+    social_c = 2.0;
+    personal_c = 2.0;
+    v_max = 0.5;
+    std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    //
+    pop_size = 50;
+    iterations = 1500;
+    personal_c = 2.0;
+    social_c = 2.0;
+    v_max = 0.628;
+    //
+    std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    pop_size = 100;
+    iterations = 1500;
+    personal_c = 2.0;
+    social_c = 2.25;
+    v_max = 0.5;
+    std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+
+//for 5 dimension
+    dimensions = 5;
+    fileName = std::to_string(dimensions) + ".out";
+
+    if (std::remove(fileName.c_str()) == 0) {
+        std::cout << "Fișierul \"" << fileName << "\" a fost șters cu succes.\n";
+    } else {
+        std::perror("Eroare la ștergerea fișierului");
+    }
+    
+    pop_size = 75;
+    personal_c = 2.25;
+    social_c = 2.25;
+    iterations = 1700;
+    v_max = 0.5;
+    std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations,pop_size, v_max, dimensions, runs);
     pop_size = 100;
     iterations = 1500;
     social_c = 2.0;
@@ -391,24 +433,24 @@ int main() {
     Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
 
 // for 100 dimensions
-    dimensions = 100;
+    // dimensions = 100;
 
-    fileName = std::to_string(dimensions) + ".out";
+    // fileName = std::to_string(dimensions) + ".out";
 
-    if (std::remove(fileName.c_str()) == 0) {
-        std::cout << "Fișierul \"" << fileName << "\" a fost șters cu succes.\n";
-    } else {
-        std::perror("Eroare la ștergerea fișierului");
-    }
+    // if (std::remove(fileName.c_str()) == 0) {
+    //     std::cout << "Fișierul \"" << fileName << "\" a fost șters cu succes.\n";
+    // } else {
+    //     std::perror("Eroare la ștergerea fișierului");
+    // }
 
-    std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
-    std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
-    std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
-    std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
+    // Particle::particle_swarm_optimization(1,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
+    // Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
+    // Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
+    // Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
 
     return 0;
 }

@@ -1,15 +1,20 @@
+Results for func_id: 1, cromosome_size: 2
+Mean: 0.000050
+Standard Deviation: 0.000132
+Global Minimum: 0.000000
+
 Results for func_id: 2, cromosome_size: 2
-Mean: 0.000012
-Standard Deviation: 0.000031
+Mean: 0.000024
+Standard Deviation: 0.000092
 Global Minimum: 0.000000
 
 Results for func_id: 3, cromosome_size: 2
-Mean: 0.066365
-Standard Deviation: 0.248177
+Mean: 0.000000
+Standard Deviation: 0.000000
 Global Minimum: 0.000000
 
 Results for func_id: 4, cromosome_size: 2
-Mean: 0.000014
-Standard Deviation: 0.000038
+Mean: 0.000015
+Standard Deviation: 0.000051
 Global Minimum: 0.000000
 
