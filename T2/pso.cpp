@@ -83,10 +83,12 @@ public:
     double best_element;
     double lower_bound;
     double upper_bound;
+    int index;
 
-    Particle(double v_max, int cromosome_size, std::mt19937& gen, std::uniform_real_distribution<>& dist,double lower_bound,double upper_bound) {
+    Particle(int index,double v_max, int cromosome_size, std::mt19937& gen, std::uniform_real_distribution<>& dist,double lower_bound,double upper_bound) {
         cromosome.resize(cromosome_size);
         velocity.resize(cromosome_size);
+        this->index = index;
         this->lower_bound = lower_bound;
         this->upper_bound = upper_bound;
         best_cromosome.resize(cromosome_size);
@@ -124,6 +126,83 @@ public:
         }
     }
 
+    // void update(double v_max, double inertia_weight, double personal_c, double social_c, const std::vector<Particle>& particles, std::mt19937& gen, std::uniform_real_distribution<>& dist, benchMarkFunc& benchmark) {
+    //     for (size_t i = 0; i < cromosome.size(); ++i) {
+    //         double r1 = dist(gen);
+    //         double r2 = dist(gen);
+    //         double personal_coefficient = personal_c * r1 * (best_cromosome[i] - cromosome[i]);
+
+    //         int left_idx = (index - 1 + particles.size()) % particles.size();
+    //         int right_idx = (index + 1) % particles.size();
+    //         std::vector<int> neighbors = { left_idx, right_idx };
+
+    //         double social_coefficient = 0.0;
+    //         for (int neighbor_idx : neighbors) {
+    //             social_coefficient += social_c * r2 * (particles[neighbor_idx].best_cromosome[i] - cromosome[i]);
+    //         }
+
+    //         velocity[i] = inertia_weight * velocity[i] + personal_coefficient + social_coefficient;
+
+    //         if (velocity[i] > v_max) {
+    //             velocity[i] = v_max;
+    //         } else if (velocity[i] < -v_max) {
+    //             velocity[i] = -v_max;
+    //         }
+
+    //         cromosome[i] += velocity[i];
+    //         if (cromosome[i] > upper_bound) cromosome[i] = upper_bound;
+    //         if (cromosome[i] < lower_bound) cromosome[i] = lower_bound;
+    //     }
+
+    //     double cost = benchmark.computeFunction(1, cromosome);
+    //     if (cost < best_element) {
+    //         best_element = cost;
+    //         best_cromosome = cromosome;
+    //     }
+    // }
+
+//Cu radius :
+
+    // void update(double v_max, double inertia_weight, double personal_c, double social_c, const std::vector<Particle>& particles, std::mt19937& gen, std::uniform_real_distribution<>& dist, benchMarkFunc& benchmark) {
+    //     int radius = 2; // un radius ales 
+    //     for (size_t i = 0; i < cromosome.size(); ++i) {
+    //         double r1 = dist(gen);
+    //         double r2 = dist(gen);
+    //         double personal_coefficient = personal_c * r1 * (best_cromosome[i] - cromosome[i]);
+
+    //         std::vector<int> neighbors;
+    //         for (int j = -radius; j <= radius; ++j) {
+    //             if (j == 0) continue; // La prima nush csf - asa ca o evit
+    //             int neighbor_idx = (index + j + particles.size()) % particles.size(); //facem  asta ca sa fie circular case index < 0.
+    //             neighbors.push_back(neighbor_idx);
+    //         }
+
+    //         double social_coefficient = 0.0;
+    //         for (int neighbor_idx : neighbors) {
+    //             social_coefficient += social_c * r2 * (particles[neighbor_idx].best_cromosome[i] - cromosome[i]);
+    //         }
+
+    //         velocity[i] = inertia_weight * velocity[i] + personal_coefficient + social_coefficient;
+
+    //         if (velocity[i] > v_max) {
+    //             velocity[i] = v_max;
+    //         } else if (velocity[i] < -v_max) {
+    //             velocity[i] = -v_max;
+    //         }
+
+    //         cromosome[i] += velocity[i];
+    //         if (cromosome[i] > upper_bound) cromosome[i] = upper_bound;
+    //         if (cromosome[i] < lower_bound) cromosome[i] = lower_bound;
+    //     }
+
+    //     double cost = benchmark.computeFunction(1, cromosome);
+    //     if (cost < best_element) {
+    //         best_element = cost;
+    //         best_cromosome = cromosome;
+    //     }
+    // }
+
+
  static void print_cromosome(int dimension,std::vector<double> cromosome){
     for(int i =0;i<dimension;i++){
         std::cout<<cromosome[i]<<' ';
@@ -132,7 +211,7 @@ public:
  }
 //aici scrie rezultatele intr-un fisier separat duma dimensions 5.out ; 10.out ; 30.out
 
- static void particle_swarm_optimization(int func_id,double personal_c,double social_c, int iterations, int pop_size, double v_max, int cromosome_size, int runs = 30) {
+ static void particle_swarm_optimization(int func_id,double personal_c,double social_c,double inertia_weight ,int iterations, int pop_size, double v_max, int cromosome_size, int runs = 30) {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dist(0.0, 1.0);
@@ -174,16 +253,18 @@ public:
             particles.reserve(pop_size);
             for (int i = 0; i < pop_size; ++i) {
                 particles.emplace_back(v_max, cromosome_size, gen, dist, lower_bound, upper_bound);
+                // particles.emplace_back(i,v_max, cromosome_size, gen, dist, lower_bound, upper_bound);
             }
                 
             std::vector<double> best_pos(cromosome_size);
             double best_pos_z = std::numeric_limits<double>::infinity();
-            double inertia_weight = 0.5 + (dist(gen)) / 2; //ciudat
+            // double inertia_weight = 0.5 + (dist(gen)) / 2; //ciudat
 
 
             for (int iter = 0; iter < iterations; ++iter) {
                 for (auto& particle : particles) {
                     particle.update(v_max, inertia_weight, personal_c, social_c, best_pos, gen, dist, benchmark);
+                    // particle.update(v_max, inertia_weight, personal_c, social_c, particles, gen, dist, benchmark);
                 }
 
                 for (const auto& particle : particles) {
@@ -262,7 +343,7 @@ int main() {
     int pop_size = 100;
     double v_max = 0.5;
     int runs = 30;
-    
+    double inertia_weight = 0.7;
     double personal_c = 2.0;
     double social_c = 1.9;
 
@@ -282,14 +363,14 @@ int main() {
     iterations = 1700;
     v_max = 0.5;
     std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations,pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(1,personal_c,social_c ,inertia_weight, iterations,pop_size, v_max, dimensions, runs);
     pop_size = 100;
     iterations = 1500;
     social_c = 2.0;
     personal_c = 2.0;
     v_max = 0.5;
     std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(2,personal_c,social_c ,inertia_weight, iterations, pop_size, v_max, dimensions, runs);
     //
     pop_size = 50;
     iterations = 1500;
@@ -298,14 +379,14 @@ int main() {
     v_max = 0.628;
     //
     std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(3,personal_c,social_c ,inertia_weight, iterations, pop_size, v_max, dimensions, runs);
     pop_size = 100;
     iterations = 1500;
     personal_c = 2.0;
     social_c = 2.25;
     v_max = 0.5;
     std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(4,personal_c,social_c ,inertia_weight, iterations, pop_size, v_max, dimensions, runs);
 
 //for 5 dimension
     dimensions = 5;
@@ -323,14 +404,14 @@ int main() {
     iterations = 1700;
     v_max = 0.5;
     std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations,pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(1,personal_c,social_c ,inertia_weight, iterations,pop_size, v_max, dimensions, runs);
     pop_size = 100;
     iterations = 1500;
     social_c = 2.0;
     personal_c = 2.0;
     v_max = 0.5;
     std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(2,personal_c,social_c ,inertia_weight, iterations, pop_size, v_max, dimensions, runs);
     //
     pop_size = 100;
     iterations = 2300;
@@ -339,14 +420,14 @@ int main() {
     v_max = 0.5;
     //
     std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(3,personal_c,social_c ,inertia_weight, iterations, pop_size, v_max, dimensions, runs);
     pop_size = 100;
     iterations = 1500;
     personal_c = 2.0;
     social_c = 2.25;
     v_max = 0.5;
     std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(4,personal_c,social_c ,inertia_weight, iterations, pop_size, v_max, dimensions, runs);
 
 // for 10 dimensions
     dimensions = 10;
@@ -363,27 +444,27 @@ int main() {
     social_c = 2.25;
     iterations = 1700;
     std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(1,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     pop_size = 150;
     iterations = 1700;
     personal_c = 2.25;
     social_c = 1.70;
     std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(2,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     pop_size = 150;
     iterations = 2300;
     personal_c = 2.25;
     social_c = 2.25;
     v_max = 0.65;
     std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(3,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     iterations = 2500;
     pop_size = 125;
     v_max = 0.65;
     personal_c = 2.25;
     social_c = 2.25;
     std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(4,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
 
 // for 30 dimensions
     dimensions = 30;
@@ -402,28 +483,28 @@ int main() {
     personal_c = 2.25;
     social_c = 2.25;
     std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(1,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(1,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     pop_size = 150;
     iterations = 2300;
     personal_c = 2.25;
     social_c = 2.25;
     v_max = 0.65;
     std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(2,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     pop_size = 150;
     iterations = 2300;
     personal_c = 2.25;
     social_c = 2.25;
     v_max = 0.65;
     std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(3,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     iterations = 4000;
     pop_size = 150;
     v_max = 0.7;
     personal_c = 2.25;
     social_c = 2.25;
     std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
-    Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    Particle::particle_swarm_optimization(4,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
 
 // for 100 dimensions
     // dimensions = 100;
@@ -437,13 +518,13 @@ int main() {
     // }
 
     // std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
-    // Particle::particle_swarm_optimization(1,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // Particle::particle_swarm_optimization(1,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     // std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
-    // Particle::particle_swarm_optimization(2,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // Particle::particle_swarm_optimization(2,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     // std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
-    // Particle::particle_swarm_optimization(3,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // Particle::particle_swarm_optimization(3,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
     // std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
-    // Particle::particle_swarm_optimization(4,personal_c,social_c , iterations, pop_size, v_max, dimensions, runs);
+    // Particle::particle_swarm_optimization(4,personal_c,social_c , inertia_weight,iterations, pop_size, v_max, dimensions, runs);
 
     return 0;
 }
