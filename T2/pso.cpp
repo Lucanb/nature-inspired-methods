@@ -21,13 +21,6 @@ public:
         this->dimensions = dimensions;
     }
 
-    // double rastrigin(const std::vector<double>& pos) {
-    //     double sum = 0.0;
-    //     for (size_t i = 0; i < pos.size(); ++i) {
-    //         sum += pos[i] * pos[i] - 10.0 * cos(2 * M_PI * pos[i]);
-    //     }
-    //     return 10 * pos.size() + sum;
-    // }
     double rastrigin(const std::vector<double>& pos) {
         double sum = 0.0;
         for (size_t i = 0; i < pos.size(); ++i) {
