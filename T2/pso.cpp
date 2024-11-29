@@ -5,6 +5,7 @@
 #include <limits>
 #include <numeric>
 #include <algorithm>
+#include <fstream>
 #include <functional>
 #include <ctime>
 
@@ -12,9 +13,9 @@
     #define M_PI 3.14159265358979323846
 #endif
 
-const double lower_bound = -600.0;
-const double upper_bound = 600.0;
-const int num_dimensions = 10;
+const double lower_bound = -5.12;
+const double upper_bound = 5.12;
+const int num_dimensions = 30;
 
 class benchMarkFunc {
 public:
@@ -25,36 +26,44 @@ public:
     }
 
     double rastrigin(const std::vector<double>& pos) {
+        // std::cout<<"dimensions : "<<dimensions<<' ';
         double sum = 0.0;
         for (size_t i = 0; i < pos.size(); ++i) {
             sum += pos[i] * pos[i] - 10.0 * cos(2 * M_PI * pos[i]);
         }
+        // std::cout<<"pop size : "<<pos.size()<<' ';
         return 10 * pos.size() + sum;
     }
 
     double rosenbrock(const std::vector<double>& pos) {
+        // std::cout<<"dimensions : "<<dimensions<<' ';
         double sum = 0.0;
         for (size_t i = 0; i < pos.size() - 1; ++i) {
             sum += 100 * std::pow(pos[i + 1] - pos[i] * pos[i], 2) + std::pow(1 - pos[i], 2);
         }
+        // std::cout<<"pop size : "<<pos.size()<<' ';
         return sum;
     }
 
     double michalewicz(const std::vector<double>& pos, double m = 10) {
+        // std::cout<<"dimensions : "<<dimensions<<' ';
         double sum = 0.0;
         for (size_t i = 0; i < pos.size(); ++i) {
             sum -= std::sin(pos[i]) * std::pow(std::sin((i + 1) * pos[i] * pos[i] / M_PI), 2 * m);
         }
+        // std::cout<<"pop size : "<<pos.size()<<' ';
         return sum;
     }
 
     double griewangk(const std::vector<double>& pos) {
+        // std::cout<<"dimensions : "<<dimensions<<' ';
         double sum = 0.0;
         double prod = 1.0;
         for (size_t i = 0; i < pos.size(); ++i) {
             sum += pos[i] * pos[i] / 4000.0;
             prod *= cos(pos[i] / sqrt(i + 1));
         }
+        // std::cout<<"pop size : "<<pos.size()<<' ';
         return sum - prod + 1.0;
     }
 
@@ -119,7 +128,9 @@ public:
         }
     }
 
-    static void particle_swarm_optimization(int func_id, int iterations, int pop_size, double v_max, int cromosome_size, int runs = 30) {
+//aici scrie rezultatele intr-un fisier separat duma dimensions 5.out ; 10.out ; 30.out
+
+ static void particle_swarm_optimization(int func_id, int iterations, int pop_size, double v_max, int cromosome_size, int runs = 30) {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dist(0.0, 1.0);
@@ -162,27 +173,132 @@ public:
         double stdev = std::sqrt(sq_sum / results.size() - mean * mean);
         double min_val = *std::min_element(results.begin(), results.end());
 
-        std::cout << "After " << runs << " runs:" << std::endl;
+        // Alege numele fișierului pe baza dimensiunii cromozomului
+        std::string file_name;
+        switch (cromosome_size) {
+            case 5:
+                file_name = "5.out";
+                break;
+            case 10:
+                file_name = "10.out";
+                break;
+            case 30:
+                file_name = "30.out";
+                break;
+            case 100:
+                file_name = "100.out";
+                break;    
+            default:
+                file_name = "unknown.out";
+                break;
+        }
+        std::cout << "Results for func_id: " << func_id << ", cromosome_size: " << cromosome_size << std::endl;
         std::cout << "Mean: " << mean << std::endl;
         std::cout << "Standard Deviation: " << stdev << std::endl;
         std::cout << "Global Minimum: " << min_val << std::endl;
+        std::cout << "Results written to " << file_name << std::endl;
+
+        // Deschidere fișier pentru scriere
+        std::ofstream file(file_name, std::ios::app); // Append la fișier
+        if (file.is_open()) {
+            file << "Results for func_id: " << func_id << ", cromosome_size: " << cromosome_size << "\n";
+            file << "Mean: " << mean << "\n";
+            file << "Standard Deviation: " << stdev << "\n";
+            file << "Global Minimum: " << min_val << "\n\n";
+            file.close();
+        } else {
+            std::cerr << "Error: Unable to open file " << file_name << std::endl;
+        }
+
+        std::cout << "Results written to " << file_name << std::endl;
     }
 };
 
 int main() {
-    int dimensions = 10;
+    int dimensions;
     int iterations = 1000;
     int pop_size = 30;
     double v_max = 0.1;
     int runs = 30;
 
-    std::cout << "Optimizing Rastrigin function:" << std::endl;
+//for 5 dimension
+    dimensions = 5;
+
+    std::string fileName = std::to_string(dimensions) + ".out";
+
+    if (std::remove(fileName.c_str()) == 0) {
+        std::cout << "Fișierul \"" << fileName << "\" a fost șters cu succes.\n";
+    } else {
+        std::perror("Eroare la ștergerea fișierului");
+    }
+
+    std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
     Particle::particle_swarm_optimization(1, iterations, pop_size, v_max, dimensions, runs);
-    std::cout << "\nOptimizing Rosenbrock function:" << std::endl;
+    std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
     Particle::particle_swarm_optimization(2, iterations, pop_size, v_max, dimensions, runs);
-    std::cout << "\nOptimizing Michalewicz function:" << std::endl;
+    std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
     Particle::particle_swarm_optimization(3, iterations, pop_size, v_max, dimensions, runs);
-    std::cout << "\nOptimizing Griewangk function:" << std::endl;
+    std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(4, iterations, pop_size, v_max, dimensions, runs);
+
+// for 10 dimensions
+    dimensions = 10;
+
+    fileName = std::to_string(dimensions) + ".out";
+
+    if (std::remove(fileName.c_str()) == 0) {
+        std::cout << "Fișierul \"" << fileName << "\" a fost șters cu succes.\n";
+    } else {
+        std::perror("Eroare la ștergerea fișierului");
+    }
+
+    std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(1, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(2, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(3, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(4, iterations, pop_size, v_max, dimensions, runs);
+
+// for 30 dimensions
+    dimensions = 30;
+
+    fileName = std::to_string(dimensions) + ".out";
+
+    if (std::remove(fileName.c_str()) == 0) {
+        std::cout << "Fișierul \"" << fileName << "\" a fost șters cu succes.\n";
+    } else {
+        std::perror("Eroare la ștergerea fișierului");
+    }
+
+    std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(1, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(2, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(3, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(4, iterations, pop_size, v_max, dimensions, runs);
+
+// for 100 dimensions
+    dimensions = 100;
+
+    fileName = std::to_string(dimensions) + ".out";
+
+    if (std::remove(fileName.c_str()) == 0) {
+        std::cout << "Fișierul \"" << fileName << "\" a fost șters cu succes.\n";
+    } else {
+        std::perror("Eroare la ștergerea fișierului");
+    }
+
+    std::cout << "Optimizing Rastrigin function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(1, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Rosenbrock function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(2, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Michalewicz function for : " <<dimensions<<" dimensions"<< std::endl;
+    Particle::particle_swarm_optimization(3, iterations, pop_size, v_max, dimensions, runs);
+    std::cout << "Optimizing Griewangk function for : " <<dimensions<<" dimensions"<< std::endl;
     Particle::particle_swarm_optimization(4, iterations, pop_size, v_max, dimensions, runs);
 
     return 0;

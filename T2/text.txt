@@ -1,0 +1,79 @@
+
+dim 5
+
+Optimizing Rastrigin function:
+After 30 runs:
+Mean: 119548
+Standard Deviation: 50298.3
+Global Minimum: 45464.6
+
+Optimizing Rosenbrock function:
+After 30 runs:
+Mean: 117420
+Standard Deviation: 46726.2
+Global Minimum: 38260.7
+
+Optimizing Michalewicz function:
+After 30 runs:
+Mean: 120300
+Standard Deviation: 47182.9
+Global Minimum: 28884
+
+Optimizing Griewangk function:
+After 30 runs:
+Mean: 123001
+Standard Deviation: 56289.9
+Global Minimum: 24772.4
+
+
+dim 10
+
+Optimizing Rastrigin function:
+After 30 runs:
+Mean: 423945
+Standard Deviation: 75773.1
+Global Minimum: 273340
+
+Optimizing Rosenbrock function:
+After 30 runs:
+Mean: 431939
+Standard Deviation: 86111
+Global Minimum: 242019
+
+Optimizing Michalewicz function:
+After 30 runs:
+Mean: 467699
+Standard Deviation: 86267.4
+Global Minimum: 326730
+
+Optimizing Griewangk function:
+After 30 runs:
+Mean: 423887
+Standard Deviation: 91919
+Global Minimum: 208824
+
+dim 30
+
+Optimizing Rastrigin function:
+After 30 runs:
+Mean: 1.86801e+06
+Standard Deviation: 151685
+Global Minimum: 1.55744e+06
+
+Optimizing Rosenbrock function:
+After 30 runs:
+Mean: 1.87081e+06
+Standard Deviation: 113309
+Global Minimum: 1.54217e+06
+
+Optimizing Michalewicz function:
+After 30 runs:
+Mean: 1.88877e+06
+Standard Deviation: 167844
+Global Minimum: 1.61326e+06
+
+Optimizing Griewangk function:
+After 30 runs:
+Mean: 1.84726e+06
+Standard Deviation: 213751
+Global Minimum: 1.40853e+06
