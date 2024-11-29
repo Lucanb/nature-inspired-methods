@@ -1,20 +1,20 @@
 Results for func_id: 1, cromosome_size: 100
-Mean: 116.927
-Standard Deviation: 31.7012
-Global Minimum: 64.955
+Mean: 107.824
+Standard Deviation: 33.4596
+Global Minimum: 59.6924
 
 Results for func_id: 2, cromosome_size: 100
-Mean: 99.6612
-Standard Deviation: 24.7914
-Global Minimum: 55.2782
+Mean: 592.891
+Standard Deviation: 46.4913
+Global Minimum: 487.546
 
 Results for func_id: 3, cromosome_size: 100
-Mean: 111.693
-Standard Deviation: 28.3009
-Global Minimum: 70.0941
+Mean: 246.064
+Standard Deviation: 22.5945
+Global Minimum: 211.433
 
 Results for func_id: 4, cromosome_size: 100
-Mean: 99.525
-Standard Deviation: 23.1066
-Global Minimum: 60.5393
+Mean: 7.35549e+06
+Standard Deviation: 329571
+Global Minimum: 6.73428e+06
 

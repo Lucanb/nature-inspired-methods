@@ -13,10 +13,6 @@
     #define M_PI 3.14159265358979323846
 #endif
 
-const double lower_bound = -5.12;
-const double upper_bound = 5.12;
-const int num_dimensions = 30;
-
 class benchMarkFunc {
 public:
     int dimensions;
@@ -89,10 +85,14 @@ public:
     std::vector<double> velocity;
     std::vector<double> best_cromosome;
     double best_element;
+    double lower_bound;
+    double upper_bound;
 
-    Particle(double v_max, int cromosome_size, std::mt19937& gen, std::uniform_real_distribution<>& dist) {
+    Particle(double v_max, int cromosome_size, std::mt19937& gen, std::uniform_real_distribution<>& dist,double lower_bound,double upper_bound) {
         cromosome.resize(cromosome_size);
         velocity.resize(cromosome_size);
+        this->lower_bound = lower_bound;
+        this->upper_bound = upper_bound;
         best_cromosome.resize(cromosome_size);
         for (int i = 0; i < cromosome_size; i++) {
             cromosome[i] = dist(gen) * (upper_bound - lower_bound) + lower_bound;
@@ -136,13 +136,42 @@ public:
         std::uniform_real_distribution<> dist(0.0, 1.0);
 
         std::vector<double> results;
+        
+        double lower_bound, upper_bound;
+        
+            switch (func_id) {
+        case 1: // Rastrigin
+                lower_bound = -5.12;
+                upper_bound = 5.12;
+            break;
+        
+        case 2: // Rosenbrock
+                lower_bound = -5.0;
+                upper_bound = 10.0;
+            break;
+        
+        case 3: // Michalewicz
+                lower_bound = 0.0;
+                upper_bound = 3.14159265;
+            break;
+
+        case 4: // Griewangk
+                lower_bound = -600.0;
+                upper_bound = 600.0;
+            break;
+
+        default:
+            std::cerr << "Funcție necunoscută!" << std::endl;
+            break;
+    }
+
         for (int r = 0; r < runs; ++r) {
             benchMarkFunc benchmark(cromosome_size);
 
             std::vector<Particle> particles;
             particles.reserve(pop_size);
             for (int i = 0; i < pop_size; ++i) {
-                particles.emplace_back(v_max, cromosome_size, gen, dist);
+                particles.emplace_back(v_max, cromosome_size, gen, dist, lower_bound, upper_bound);
             }
 
             std::vector<double> best_pos(cromosome_size);
@@ -223,7 +252,8 @@ int main() {
 
 //for 5 dimension
     dimensions = 5;
-
+    double lower_bound = -5.12;
+    double upper_bound = 5.12;
     std::string fileName = std::to_string(dimensions) + ".out";
 
     if (std::remove(fileName.c_str()) == 0) {
