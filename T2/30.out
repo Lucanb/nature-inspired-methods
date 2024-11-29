@@ -1,20 +1,20 @@
 Results for func_id: 1, cromosome_size: 30
-Mean: 33.8548
-Standard Deviation: 9.27579
-Global Minimum: 13.904
+Mean: 69.721259
+Standard Deviation: 44.540376
+Global Minimum: 14.124058
 
 Results for func_id: 2, cromosome_size: 30
-Mean: 143.427
-Standard Deviation: 25.8848
-Global Minimum: 101.51
+Mean: 136.769627
+Standard Deviation: 51.265839
+Global Minimum: 62.770921
 
 Results for func_id: 3, cromosome_size: 30
-Mean: 71.8075
-Standard Deviation: 8.37497
-Global Minimum: 56.8043
+Mean: 91.005468
+Standard Deviation: 47.370662
+Global Minimum: 24.330013
 
-Results for func_id: 4, cromosome_size: 30
-Mean: 1.88053e+06
-Standard Deviation: 178255
-Global Minimum: 1.47223e+06
+Results for func_id: 1, cromosome_size: 30
+Mean: Invalid
+Standard Deviation: Invalid
+Global Minimum: Invalid
 

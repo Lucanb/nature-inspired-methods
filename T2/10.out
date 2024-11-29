@@ -1,20 +1,15 @@
 Results for func_id: 1, cromosome_size: 10
-Mean: 11.4466
-Standard Deviation: 4.57556
-Global Minimum: 3.97984
+Mean: 9.590531
+Standard Deviation: 4.210895
+Global Minimum: 1.989918
 
 Results for func_id: 2, cromosome_size: 10
-Mean: 29.0951
-Standard Deviation: 13.1374
-Global Minimum: 6.96471
+Mean: 13.693249
+Standard Deviation: 6.982797
+Global Minimum: 1.989918
 
 Results for func_id: 3, cromosome_size: 10
-Mean: 20.4668
-Standard Deviation: 4.81623
-Global Minimum: 13.9294
-
-Results for func_id: 4, cromosome_size: 10
-Mean: 460348
-Standard Deviation: 63029.9
-Global Minimum: 368631
+Mean: 10.093755
+Standard Deviation: 3.521857
+Global Minimum: 3.979836
 
