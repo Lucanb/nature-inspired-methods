@@ -83,12 +83,11 @@ public:
     double best_element;
     double lower_bound;
     double upper_bound;
-    int index;
+    // int index;
 
-    Particle(int index,double v_max, int cromosome_size, std::mt19937& gen, std::uniform_real_distribution<>& dist,double lower_bound,double upper_bound) {
+    Particle(double v_max, int cromosome_size, std::mt19937& gen, std::uniform_real_distribution<>& dist,double lower_bound,double upper_bound) {
         cromosome.resize(cromosome_size);
         velocity.resize(cromosome_size);
-        this->index = index;
         this->lower_bound = lower_bound;
         this->upper_bound = upper_bound;
         best_cromosome.resize(cromosome_size);
@@ -99,7 +98,20 @@ public:
         best_cromosome = cromosome;
         best_element = std::numeric_limits<double>::infinity();
     }
-
+    // Particle(int index,double v_max, int cromosome_size, std::mt19937& gen, std::uniform_real_distribution<>& dist,double lower_bound,double upper_bound) {
+    //     cromosome.resize(cromosome_size);
+    //     velocity.resize(cromosome_size);
+    //     this->index = index;
+    //     this->lower_bound = lower_bound;
+    //     this->upper_bound = upper_bound;
+    //     best_cromosome.resize(cromosome_size);
+    //     for (int i = 0; i < cromosome_size; i++) {
+    //         cromosome[i] = dist(gen) * (upper_bound - lower_bound) + lower_bound;
+    //         velocity[i] = dist(gen) * 2 * v_max - v_max;
+    //     }
+    //     best_cromosome = cromosome;
+    //     best_element = std::numeric_limits<double>::infinity();
+    // }
     void update(double v_max, double inertia_weight, double personal_c, double social_c, const std::vector<double>& global_best_pos, std::mt19937& gen, std::uniform_real_distribution<>& dist, benchMarkFunc& benchmark) {
         for (size_t i = 0; i < cromosome.size(); ++i) {
             double r1 = dist(gen);
