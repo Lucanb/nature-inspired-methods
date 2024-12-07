@@ -1,0 +1,7 @@
+Results for 2-dimensional optimization:
+
+Results for rastrigin (2D):
+Best Parameters: {'w': 0.4764728716536351, 'phi_cog': 1.7721495802606961, 'phi_soc': 1.2836409576658627, 'eps': 0.07373610661183042, 'p': 0.15041438806851348}
+Best Value: 0.00000
+Stats (min, max, mean, stdev): (2.8560265263877227e-10, 48.96198596037283, 7.7425828342756695, 12.8309338421897)
+
